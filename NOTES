@@ -1,0 +1,77 @@
+-*- mode: org; mode: auto-fill -*-
+#+STARTUP: hidestars
+#+STARTUP: odd
+#+STARTUP: oddeven
+
+* Version 1.0
+
+*** DONE Defsystem
+*** DONE Defpackage
+*** TODO Manual
+*** TODO Miscellany
+***** DONE QUADRATIC-ROOTS-ABOVE
+***** DONE QUADRATIC-ROOTS
+***** TODO CUBIC-ROOTS-ABOVE
+***** TODO CUBIC-ROOTS
+***** TODO QUADRIC-ROOTS-ABOVE
+***** TODO QUADRIC-ROOTS
+*** TODO VEC
+***** DONE VEC type
+***** TODO Additional operations
+******* TODO NORMALIZED-VEC
+******* TODO NORMALIZED-CROSS-PRODUCT
+******* TODO NORMALIZED-TRANSFORM-POINT
+	The reason these seem worthwhile is that they avoid memory
+	traffic -- but it is probably not a good idea to expose
+	them as part of the interface!
+******* DONE ADJUST-VEC
+******* TODO Implement VEC-MIN/MAX using MINPS/MAXPS.
+***** DONE Predicates
+******* DONE Tests
+******* DONE VECP
+******* DONE POINTP
+******* DONE VECTOR3P
+******* DONE VEC=
+***** DONE Constructors & copiers
+******* DONE Tests
+******* DONE ALLOC-VEC
+******* DONE VEC
+******* DONE COPY-VEC, %COPY-VEC
+******* DONE POINT
+******* DONE VECTOR3
+******* DONE POINT->VECTOR3
+******* DONE VECTOR3->POINT
+***** DONE Arithmetic
+******* DONE VEC+, %VEC+
+******* DONE VEC-, %VEC-
+******* DONE VEC*, %VEC*
+******* DONE VEC/, %VEC/
+******* DONE DOT-PRODUCT
+******* DONE HADAMARD-PRODUCT, %HADAMARD-PRODUCT
+******* DONE VEC-LENGTH
+******* DONE VEC-LERP
+******* DONE NORMALIZE, %NORMALIZE
+******* DONE VEC-MIN, VEC-MAX
+******* DONE CROSS-PRODUCT
+*** TODO MATRIX
+***** TODO Tests
+***** DONE TRANSFORM-VEC, %TRANSFORM-VEC
+***** DONE MATRIX type
+***** DONE MREF
+***** DONE MATRIXP
+***** DONE MATRIX* (variable arity)
+***** DONE MATRIX
+***** DONE MAKE-TRANSLATION-MATRIX
+***** DONE MAKE-SCALING-MATRIX
+***** DONE MAKE-ROTATION-MATRIX
+***** DONE MAKE-REORIENTING-MATRIX
+***** DONE TRANSPOSE-MATRIX
+***** DONE INVERSE-MATRIX (orthogonal and affine only)
+***** DONE MAKE-ZERO-MATRIX
+***** DONE MAKE-IDENTIY-MATRIX
+***** DONE MATRIX=
+
+* Version 2.0
+*** TODO Separate transform type, used double-floats in matrices.
+*** TODO Compiler macros to transform nested operations for less consing.
+*** TODO Variable arity in vector arithmetic without memory traffic for intermediate results
