@@ -34,7 +34,7 @@
 ;;;; KLUDGE: SBCL doesn't currently have SSE2 feature, but it's cleaner to
 ;;;; conditionalize on a single feature (relevant once x86 gets SSE2
 ;;;; instructions.)
-#+x86-64
+#+ (and sbcl x86-64)
 (eval-when (:compile-toplevel :load-toplevel :execute)
   (pushnew :sb-cga-sse2 *features*))
 
@@ -73,7 +73,7 @@
                      (inst unpckhps ,target ,target)))))))
 
 ;;;; VECTOR COMPARISON
-
+#+sbcl
 (defknown %vec= (vec vec) boolean
     (any #+sb-cga-sse2 always-translatable))
 
@@ -100,6 +100,7 @@
 
 ;;;; VECTOR COPYING
 
+#+sbcl
 (defknown %copy-vec (vec vec) vec (any)
   :result-arg 0)
 
@@ -120,6 +121,7 @@
 
 ;;;; VECTOR ADDITION
 
+#+sbcl
 (defknown %vec+ (vec vec vec) vec (any)
   :result-arg 0)
 
@@ -141,10 +143,12 @@
     (store-slice tmp result-vector)
     (move result result-vector)))
 
+#+sbcl
 (defknown %%vec+/1 (vec vec) vec
     (any #+sb-cga-sse2 always-translatable)
   :result-arg 0)
 
+#+sbcl
 (defknown %%vec+/2 (vec vec) vec
     (any #+sb-cga-sse2 always-translatable)
   :result-arg 1)
@@ -170,6 +174,7 @@
 
 ;;;; VECTOR SUBSTRACTION
 
+#+sbcl
 (defknown %vec- (vec vec vec) vec (any)
   :result-arg 0)
 
@@ -191,10 +196,12 @@
     (store-slice tmp result-vector)
     (move result result-vector)))
 
+#+sbcl
 (defknown %%vec-/1 (vec vec) vec
     (any #+sb-cga-sse2 always-translatable)
   :result-arg 0)
 
+#+sbcl
 (defknown %%vec-/2 (vec vec) vec
     (any #+sb-cga-sse2 always-translatable)
   :result-arg 1)
@@ -220,6 +227,7 @@
 
 ;;;; VECTOR/SCALAR MULTIPLICATION
 
+#+sbcl
 (defknown %vec* (vec vec single-float) vec (any)
   :result-arg 0)
 
@@ -241,6 +249,7 @@
     (store-slice tmp result-vector)
     (move result result-vector)))
 
+#+sbcl
 (defknown %%vec*/1 (vec single-float) vec
     (any #+sb-cga-sse2 always-translatable)
   :result-arg 0)
@@ -263,6 +272,7 @@
 
 ;;;; VECTOR/SCALAR DIVISION
 
+#+sbcl
 (defknown %vec/ (vec vec single-float) vec (any)
   :result-arg 0)
 
@@ -287,6 +297,7 @@
     (store-slice tmp result-vector)
     (move result result-vector)))
 
+#+sbcl
 (defknown %%vec//1 (vec single-float) vec
     (any #+sb-cga-sse2 always-translatable)
   :result-arg 0)
@@ -311,6 +322,7 @@
 
 ;;;; DOT PRODUCT
 
+#+sbcl
 (defknown %dot-product (vec vec) single-float
     (any #+sb-cga-sse2 always-translatable))
 
@@ -342,12 +354,14 @@
 ;;;;
 ;;;; No VOP, just the defknown.
 
+#+sbcl
 (defknown %cross-product (vec vec vec) vec
     (any)
   :result-arg 0)
 
 ;;;; HADAMARD PRODUCT
 
+#+sbcl
 (defknown %hadamard-product (vec vec vec) vec (any)
   :result-arg 0)
 
@@ -369,10 +383,12 @@
     (store-slice tmp result-vector)
     (move result result-vector)))
 
+#+sbcl
 (defknown %%hadamard-product/1 (vec vec) vec
     (any #+sb-cga-sse2 always-translatable)
   :result-arg 0)
 
+#+sbcl
 (defknown %%hadamard-product/2 (vec vec) vec
     (any #+sb-cga-sse2 always-translatable)
   :result-arg 1)
@@ -398,6 +414,7 @@
 
 ;;; VECTOR LENGTH
 
+#+sbcl
 (defknown %vec-length (vec) single-float
     (any #+sb-cga-sse2 always-translatable))
 
@@ -424,6 +441,7 @@
 
 ;;;; NORMALIZATION
 
+#+sbcl
 (defknown %normalize (vec vec) vec (any)
   :result-arg 0)
 
@@ -465,6 +483,7 @@
     (inst movss (ea-for-data result-vector 2) tmp6)
     (move result result-vector)))
 
+#+sbcl
 (defknown %%normalize/1 (vec) vec
     (any #+sb-cga-sse2 always-translatable)
   :result-arg 0)
@@ -508,6 +527,7 @@
 
 ;;;; LINEAR INTERPOLATION
 
+#+sbcl
 (defknown %vec-lerp (vec vec vec single-float) vec (any)
   :result-arg 0)
 
@@ -536,10 +556,12 @@
     (store-slice floats result-vector)
     (move result result-vector)))
 
+#+sbcl
 (defknown %%vec-lerp/1 (vec vec single-float) vec
     (any #+sb-cga-sse2 always-translatable)
   :result-arg 0)
 
+#+sbcl
 (defknown %%vec-lerp/2 (vec vec single-float) vec
     (any #+sb-cga-sse2 always-translatable)
   :result-arg 1)
@@ -573,6 +595,7 @@
 
 ;;;; TRANSFORMING A POINT
 
+#+sbcl
 (defknown %transform-point (vec vec matrix) vec (any)
   :result-arg 0)
 
@@ -613,6 +636,7 @@
     (store-slice col1 result-vector)
     (move result result-vector)))
 
+#+sbcl
 (defknown %%transform-point/1 (vec matrix) vec
     (any #+sb-cga-sse2 always-translatable)
   :result-arg 0)
@@ -655,6 +679,7 @@
 
 ;;;; TRANSFORMING A DIRECTION
 
+#+sbcl
 (defknown %transform-direction (vec vec matrix) vec (any)
   :result-arg 0)
 
@@ -695,6 +720,7 @@
     (store-slice col1 result-vector)
     (move result result-vector)))
 
+#+sbcl
 (defknown %%transform-direction/1 (vec matrix) vec
     (any #+sb-cga-sse2 always-translatable)
   :result-arg 0)
@@ -737,6 +763,7 @@
 
 ;;;; ADJUSTING A VECTOR
 
+#+sbcl
 (defknown %adjust-vec (vec vec vec single-float) vec (any)
   :result-arg 0)
 
@@ -761,10 +788,12 @@
     (store-slice tmp result-vector)
     (move result result-vector)))
 
+#+sbcl
 (defknown %%adjust-vec/1 (vec vec single-float) vec
     (any #+sb-cga-sse2 always-translatable)
   :result-arg 0)
 
+#+sbcl
 (defknown %%adjust-vec/2 (vec vec single-float) vec
     (any #+sb-cga-sse2 always-translatable)
   :result-arg 1)

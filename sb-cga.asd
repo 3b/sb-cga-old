@@ -19,6 +19,7 @@
 (defsystem :sb-cga
   :description "Computer graphic algebra for SBCL."
   :serial t
+  :depends-on (#-sbcl :alexandria)
   :components
   ((:file "package")
    (:file "types")

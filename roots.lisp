@@ -61,7 +61,8 @@ primary value, and the otheras secondary. NaN indicates lack of a real-valued
 root."
   (declare (optimize speed))
   (let ((d (- (* b b) (* 4.0 a c)))
-        (nan #.(/ 0.0 0.0)))
+        (nan #-ccl #.(/ 0.0 0.0)
+             #+ccl 1e+-0))
     (if (< d 0.0)
         (values nan nan)
         (let* ((sqrt-d (sqrt d))

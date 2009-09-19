@@ -20,7 +20,8 @@
 
 (defmacro define-vm-fun (name lambda-list &body generic-body)
   (multiple-value-bind (forms declarations doc)
-      (sb-int:parse-body generic-body :doc-string-allowed t)
+      #+sbcl (sb-int:parse-body generic-body :doc-string-allowed t)
+      #-sbcl (alexandria:parse-body generic-body :documentation t)
     (declare (ignorable forms))
     `(progn
        #-sb-cga-sse2
@@ -28,7 +29,7 @@
        (defun ,name ,lambda-list
          ,@(when doc (list doc))
          ,@declarations
-         (declare (optimize (speed 3) (safety 1) (debug 1) (sb-c::recognize-self-calls 0)))
+         (declare (optimize (speed 3) (safety 1) (debug 1) #+sbcl (sb-c::recognize-self-calls 0)))
          #+sb-cga-sse2
          (,name ,@lambda-list)
          #-sb-cga-sse2
@@ -167,8 +168,8 @@ interpolation factor, store result in VEC RESULT. Return RESULT. Unsafe."
       (dim 2))
     result))
 
-(define-vm-fun %%vec-lerp/1 (a b d) (%vec-lerp a a b f))
-(define-vm-fun %%vec-lerp/2 (a b d) (%vec-lerp b a b f))
+(define-vm-fun %%vec-lerp/1 (a b d) (%vec-lerp a a b d))
+(define-vm-fun %%vec-lerp/2 (a b d) (%vec-lerp b a b d))
 
 ;;;; TRANSFORMING A VECTOR -- either as a point or a direction
 
