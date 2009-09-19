@@ -17,10 +17,11 @@
 ;;;; SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 (eval-when (:compile-toplevel :load-toplevel :execute)
-  (require :sb-rt))
+  #+sbcl (require :sb-rt)
+  #-sbcl (asdf:operate 'asdf:load-op :rt))
 
 (defpackage :sb-cga-test
-  (:use :cl :sb-rt :sb-cga))
+  (:use :cl #+sbcl :sb-rt #-sbcl rt :sb-cga))
 
 (in-package :sb-cga-test)
 
@@ -28,7 +29,8 @@
 
 ;;; Cheap, cheap.
 (defmacro is ((test result (op &rest args) &rest test-args))
-  (let* ((temps (sb-int:make-gensym-list (length args)))
+  (let* ((temps #+sbcl(sb-int:make-gensym-list (length args))
+                #-sbcl(alexandria:make-gensym-list (length args)))
          (form `(,op ,@args))
          (lambda1 `(lambda ,temps (,op ,@temps)))
          (lambda2 `(lambda () (,op ,@args))))
@@ -428,7 +430,7 @@
           (v-ops '(normalize copy-vec))
           (vv-ops '(hadamard-product vec- vec+))
           (vf-ops '(vec/ vec*))
-          (sb-ext:*evaluator-mode* :interpret)
+          #+sbcl(sb-ext:*evaluator-mode* :interpret)
           (problems nil))
       (labels ((r () (- (random 10.0) 5.0))
                (vr () `(vec ,(r) ,(r) ,(r)))
@@ -452,8 +454,10 @@
                    (name2 (car spec2))
                    (args1 (cdr (args name1)))
                    (args2 (args name2))
-                   (gensyms1 (sb-int:make-gensym-list (length args1)))
-                   (gensyms2 (sb-int:make-gensym-list (length args2)))
+                   (gensyms1 #+sbcl(sb-int:make-gensym-list (length args1))
+                             #-sbcl(alexandria:make-gensym-list (length args1)))
+                   (gensyms2 #+sbcl(sb-int:make-gensym-list (length args2))
+                             #-sbcl(alexandria:make-gensym-list (length args2)))
                    (form `(,name1 (,name2 ,@args2) ,@args1))
                    (fun (compile nil
                                  `(lambda (,@gensyms2 ,@gensyms1)
