@@ -60,11 +60,10 @@ of a real-valued root above LIMIT."
 primary value, and the otheras secondary. NaN indicates lack of a real-valued
 root."
   (declare (optimize speed))
-  (let ((d (- (* b b) (* 4.0 a c)))
-        (nan #-ccl #.(/ 0.0 0.0)
-             #+ccl 1e+-0))
+  (let ((d (- (* b b) (* 4.0 a c))))
     (if (< d 0.0)
-        (values nan nan)
+        (values #+sbcl (/ 0.0 0.0) #+sbcl (/ 0.0 0.0)
+                #-sbcl 1e+-0 #-sbcl 1e+-0)
         (let* ((sqrt-d (sqrt d))
                (1/2a (/ 1.0 (+ a a)))
                (-b (- b))
